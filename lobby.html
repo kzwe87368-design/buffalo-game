@@ -28,6 +28,22 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+
+<script>
+(async function () {
+  if (window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true) {
+    try {
+      if (screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock("landscape");
+      }
+    } catch (e) {
+      console.log("Landscape lock unavailable:", e.message);
+    }
+  }
+})();
+</script>
+
 </head>
 <body>
 <header>
