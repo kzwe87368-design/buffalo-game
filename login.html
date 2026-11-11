@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BUFFALO LOGIN</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(#641b0d,#16000b);color:white;font-family:Arial;display:grid;place-items:center;min-height:100vh}
+.box{width:90%;max-width:380px;background:#31040d;padding:25px;border:2px solid #e7b34b;border-radius:18px;text-align:center}
+h1{color:#ffe18a}
+input{width:100%;padding:14px;margin:8px 0;border-radius:8px;border:1px solid gold;background:#21000b;color:white}
+button{padding:13px;margin:8px 0;width:100%;border:0;border-radius:8px;background:linear-gradient(#ffe58a,#c96c0c);font-weight:bold}
+#msg{color:#ffe18a;min-height:25px}
+</style>
+
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#111111">
+<link rel="apple-touch-icon" href="/static/icons/icon-512.png">
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(console.error);
+  });
+}
+</script>
+</head>
+<body>
+<div class="box">
+<h1>🐃 BUFFALO</h1>
+<p>BUFFALO SLOT ONLINE</p>
+<input id="username" placeholder="Username (3-20 characters)">
+<input id="password" type="password" placeholder="Password (8 characters minimum)">
+<button onclick="send('/api/register')">CREATE ACCOUNT</button>
+<button onclick="send('/api/login')">LOGIN</button>
+<p id="msg"></p>
+</div>
+<script>
+async function send(url){
+const msg=document.getElementById('msg');
+msg.textContent='Please wait...';
+try{
+const r=await fetch(url,{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+username:document.getElementById('username').value,
+password:document.getElementById('password').value
+})
+});
+const d=await r.json();
+msg.textContent=d.message||d.error;
+if(r.ok && url.includes('login')) location.href='/lobby';
+}catch(e){msg.textContent='Connection error';}
+}
+</script>
+</body>
+</html>

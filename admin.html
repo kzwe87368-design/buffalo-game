@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BUFFALO OWNER</title>
+<style>
+body{background:#20000b;color:white;font-family:Arial;padding:15px}
+h1{color:#ffe18a;text-align:center}
+.box{background:#430914;border:1px solid gold;border-radius:12px;padding:14px;margin:12px 0}
+button{background:linear-gradient(#ffe58a,#c96c0c);padding:10px;border:0;border-radius:7px;font-weight:bold}
+input{padding:10px;width:90%;margin:7px 0}
+.user{padding:12px;border-bottom:1px solid #855}
+</style>
+</head>
+<body>
+<h1>🐃 BUFFALO OWNER</h1>
+<div class="box">
+<h3>USER MANAGEMENT</h3>
+<div id="users">Loading...</div>
+</div>
+<div class="box">
+<h3>VIRTUAL COIN CONTROL</h3>
+<input id="uid" type="number" placeholder="User ID">
+<input id="amount" type="number" placeholder="Coin amount (+ or -)">
+<button onclick="changeCoins()">UPDATE COINS</button>
+<p id="msg"></p>
+</div>
+<script>
+async function load(){
+ const r=await fetch('/api/admin/users');
+ const d=await r.json();
+ if(!r.ok){users.textContent=d.error;return;}
+ users.innerHTML=d.users.map(u=>
+ `<div class="user">ID: ${u.id}<br>Username: ${u.username}<br>Coins: ${u.coins.toLocaleString()}<br>Role: ${u.role}</div>`
+ ).join('');
+}
+async function changeCoins(){
+ const r=await fetch('/api/admin/coins',{
+ method:'POST',
+ headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({
+ id:uid.value,amount:amount.value
+ })
+ });
+ const d=await r.json();
+ msg.textContent=d.message||d.error;
+ if(r.ok)load();
+}
+load();
+</script>
+</body>
+</html>

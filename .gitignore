@@ -1,0 +1,22 @@
+database/
+backups/
+backup/
+__pycache__/
+*.pyc
+*.db
+*.db-journal
+*.tar.gz
+*.backup
+*.pre_coin_backup
+*.before_*
+.env
+*backup*
+*.pre_*
+*.old
+*.log
+
+# Old and test files
+/index_old.html
+/index_before_animation.html
+/check.js
+/buffalo_check.js

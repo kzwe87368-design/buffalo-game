@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SHAN KOE MEE</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(#174c35,#061b14);color:#fff;font-family:Arial,sans-serif}
+header{padding:14px;text-align:center;background:#102d21;border-bottom:2px solid #d8b45a}
+header h2{margin:0;color:#ffdf86}
+header p{margin:5px;font-size:12px}
+.back{position:absolute;left:10px;top:12px;background:#6b241b;color:white}
+button,select{padding:10px;border:1px solid #e8c66d;border-radius:8px;font-weight:bold}
+.table{position:relative;width:96%;max-width:650px;height:510px;margin:15px auto;background:radial-gradient(#267b51,#105035);border:9px solid #70431f;border-radius:48%;box-shadow:inset 0 0 25px #03170d,0 5px 15px #000}
+.dealer{position:absolute;top:8px;left:50%;transform:translateX(-50%);text-align:center}
+
+.dealer .avatar{background:linear-gradient(135deg,#f5c6a5,#8d3b54);font-size:30px;width:64px;height:64px;animation:dealerIdle 1.8s infinite ease-in-out}
+.dealer.dealing .avatar{animation:dealerMove .35s infinite alternate}
+@keyframes dealerIdle{50%{transform:translateY(-5px)}}
+@keyframes dealerMove{from{transform:translateY(0) rotate(-5deg)}to{transform:translateY(8px) rotate(5deg)}}
+.hand{display:flex;justify-content:center;gap:3px;margin-top:4px;min-height:28px}
+.mini-card{background:#fff;color:#182b55;border:1px solid #e8c66d;border-radius:4px;padding:3px 5px;font-size:11px;font-weight:bold;box-shadow:0 2px 4px #000}
+.flying-card{position:absolute;z-index:20;left:50%;top:75px;width:27px;height:38px;background:#fff;color:#183e63;border:2px solid #e8c66d;border-radius:4px;display:grid;place-items:center;font-weight:bold;transition:transform .32s ease-in;pointer-events:none}
+.deal-status{color:#ffe28b;font-weight:bold;min-height:22px}
+.deal-btn:disabled{opacity:.6}
+
+.seat{position:absolute;text-align:center;width:90px;font-size:12px}
+.avatar{width:45px;height:45px;margin:auto auto 4px;border:2px solid #e8c66d;border-radius:50%;background:#183e63;display:grid;place-items:center;font-size:22px}
+.name{font-weight:bold}
+.money{color:#ffe28b;margin-top:3px}
+.bank{color:#ff8c67;font-weight:bold}
+.s1{top:115px;left:5px}
+.s2{top:20px;left:22%}
+.s3{top:20px;right:22%}
+.s4{top:115px;right:5px}
+.s5{bottom:35px;right:8%}
+.s6{bottom:35px;left:8%}
+.s7{bottom:5px;left:50%;transform:translateX(-50%)}
+.center{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);text-align:center;width:75%}
+.center h3{color:#ffe28b;margin:5px}
+.pot{font-size:19px;font-weight:bold;color:#fff}
+.cards{display:flex;justify-content:center;gap:7px;margin:12px}
+.playcard{width:42px;height:58px;border-radius:6px;background:#fff;color:#111;display:grid;place-items:center;font-size:20px;font-weight:bold}
+.controls{max-width:500px;margin:15px auto;padding:12px;text-align:center;background:#102d21;border:1px solid #b18b43;border-radius:12px}
+.controls select{width:100%;margin:8px 0;background:#fff}
+.info{font-size:13px;line-height:1.8;color:#e9dfc4}
+.action{background:linear-gradient(#ffe58a,#bd781e);color:#321900;margin:5px}
+@media(max-width:390px){.table{height:465px}.seat{width:76px;font-size:11px}.avatar{width:39px;height:39px}.s1,.s4{top:120px}.playcard{width:35px;height:50px}}
+</style>
+
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#111111">
+<link rel="apple-touch-icon" href="/static/icons/icon-512.png">
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(console.error);
+  });
+}
+</script>
+</head>
+<body>
+<header>
+<button class="back" onclick="location.href='/game'">← BACK</button>
+<h2>♠ SHAN KOE MEE ♠</h2>
+<p>ရှမ်းကိုးမီး ကစားဝိုင်း</p>
+</header>
+
+<div class="table">
+  <div class="dealer">
+    <div class="avatar">👩🏻</div>
+    <div class="name">ဖဲဝေသူ</div>
+    <div class="money">DEALER / BANKER</div><div class="hand" id="dealerHand"></div>
+  </div>
+
+  <div class="seat s1"><div class="avatar">🤖</div><div class="name">AI 1</div><div class="money">10,000</div><div class="hand"></div></div>
+  <div class="seat s2"><div class="avatar">🤖</div><div class="name">AI 2</div><div class="money">10,000</div><div class="hand"></div></div>
+  <div class="seat s3"><div class="avatar">🤖</div><div class="name">AI 3</div><div class="money">10,000</div><div class="hand"></div></div>
+  <div class="seat s4"><div class="avatar">🤖</div><div class="name">AI 4</div><div class="money">10,000</div><div class="hand"></div></div>
+  <div class="seat s5"><div class="avatar">🤖</div><div class="name">AI 5</div><div class="money">10,000</div><div class="hand"></div></div>
+  <div class="seat s6"><div class="avatar">🤖</div><div class="name">AI 6</div><div class="money">10,000</div><div class="hand"></div></div>
+  <div class="seat s7"><div class="avatar">👤</div><div class="name">YOU</div><div class="money">10,000</div><div class="hand"></div></div>
+
+  <div class="center">
+    <h3>ကစားဝိုင်း</h3>
+    <div class="pot">ဒိုင်လက်ကျန် — 0</div>
+    <div class="cards">
+      <div class="playcard">?</div>
+      <div class="playcard">?</div>
+    </div>
+    <div class="deal-status" id="dealStatus">ဖဲဝေမှု မစတင်ရသေးပါ</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="info">ကစားသူ ၇ ယောက် + ဒိုင် ၁ ယောက်</div>
+  <label>ကစားဝိုင်းကြေး</label>
+  <select id="bet">
+    <option value="1000">1,000</option>
+    <option value="2000">2,000</option>
+    <option value="3000">3,000</option>
+    <option value="4000">4,000</option>
+    <option value="5000">5,000</option>
+    <option value="10000">10,000</option>
+    <option value="20000">20,000</option>
+    <option value="30000">30,000</option>
+    <option value="40000">40,000</option>
+    <option value="50000">50,000</option>
+  </select>
+  <button class="action deal-btn" id="dealBtn" onclick="dealCards()">ဖဲဝေမည်</button>
+  <button class="action" id="playBtn" onclick="playRound()" disabled>အနိုင်အရှုံးတွက်မည်</button>
+  <div class="info">အနည်းဆုံးထိုးကြေး 1,000 | အများဆုံး 50,000</div>
+</div>
+
+<script>
+let currentRound = null;
+let busy = false;
+
+function showHand(element, cards) {
+  element.innerHTML = '';
+  cards.forEach(value => {
+    const card = document.createElement('span');
+    card.className = 'mini-card';
+    card.textContent = value;
+    if (value.endsWith('♥') || value.endsWith('♦')) card.style.color = '#d21d35';
+    element.appendChild(card);
+  });
+}
+
+async function dealCards() {
+  if (busy || currentRound) return;
+
+  const btn = document.getElementById('dealBtn');
+  const playBtn = document.getElementById('playBtn');
+  const status = document.getElementById('dealStatus');
+  busy = true;
+  btn.disabled = true;
+  playBtn.disabled = true;
+  status.textContent = 'Server မှ ဖဲဝေနေပါသည်...';
+
+  document.querySelectorAll('.seat .hand').forEach(h => h.innerHTML = '');
+  document.getElementById('dealerHand').innerHTML = '';
+
+  try {
+    const response = await fetch('/api/shan/deal', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({bet: Number(document.getElementById('bet').value)})
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'ဖဲဝေမရပါ');
+
+    currentRound = data.round_id;
+
+    showHand(document.getElementById('dealerHand'), data.hands['AI DEALER']);
+
+    document.querySelectorAll('.seat').forEach(seat => {
+      const name = seat.querySelector('.name').textContent.trim();
+      showHand(seat.querySelector('.hand'), data.hands[name]);
+    });
+
+    status.textContent = 'ဖဲ ၂ ချပ်စီ ရပါပြီ။ အနိုင်အရှုံးတွက်နိုင်ပါပြီ။';
+    playBtn.disabled = false;
+  } catch (error) {
+    status.textContent = error.message;
+    btn.disabled = false;
+  } finally {
+    busy = false;
+  }
+}
+
+async function playRound() {
+  if (busy || !currentRound) return;
+
+  busy = true;
+  const playBtn = document.getElementById('playBtn');
+  const status = document.getElementById('dealStatus');
+  playBtn.disabled = true;
+  status.textContent = 'တတိယဖဲနှင့် အနိုင်အရှုံးတွက်နေပါသည်...';
+
+  try {
+    const response = await fetch('/api/shan/play', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({round_id: currentRound})
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'တွက်ချက်မှု မအောင်မြင်ပါ');
+
+    showHand(document.getElementById('dealerHand'), data.results['AI DEALER'].cards);
+
+    document.querySelectorAll('.seat').forEach(seat => {
+      const name = seat.querySelector('.name').textContent.trim();
+      const result = data.results[name];
+      showHand(seat.querySelector('.hand'), result.cards);
+      seat.querySelector('.money').textContent =
+        'အမှတ် ' + result.score + (result.auto_shan ? ' / AUTO SHAN' : '');
+    });
+
+    status.textContent = data.message + ' | YOU အမှတ် ' +
+      data.results.YOU.score + ' | ဒိုင်အမှတ် ' +
+      data.results['AI DEALER'].score + ' | ရရှိငွေ ' +
+      data.credit.toLocaleString() + ' | လက်ကျန် ' +
+      data.coins.toLocaleString();
+
+    currentRound = null;
+    document.getElementById('dealBtn').disabled = false;
+  } catch (error) {
+    status.textContent = error.message;
+    playBtn.disabled = false;
+  } finally {
+    busy = false;
+  }
+}
+</script>
+</body>
+</html>

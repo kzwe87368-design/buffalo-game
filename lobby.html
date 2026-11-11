@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GAME LOBBY</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(#173d32,#06140f);color:white;font-family:Arial,sans-serif;padding:20px}
+header{text-align:center;padding:20px 0}
+h1{color:#ffe18a;font-size:32px;margin:5px}
+#username{color:#b8e8cf}
+.wallet{margin:15px auto;padding:15px;max-width:420px;background:#173d32;border:1px solid #65bd8a;border-radius:12px;text-align:center}
+.games{max-width:650px;margin:25px auto;display:grid;grid-template-columns:1fr;gap:18px}
+.game{background:linear-gradient(145deg,#244d3b,#10271e);border:1px solid #8bc49b;border-radius:16px;padding:22px;text-align:center}
+.game h2{color:#ffe18a;margin:5px}
+.game p{color:#d1e6d8}
+button{width:100%;padding:14px;border:0;border-radius:9px;background:linear-gradient(#ffe58a,#c96c0c);font-weight:bold;font-size:16px}
+.logout{display:block;max-width:250px;margin:30px auto;background:#71302b;color:white}
+</style>
+
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#111111">
+<link rel="apple-touch-icon" href="/static/icons/icon-512.png">
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(console.error);
+  });
+}
+</script>
+</head>
+<body>
+<header>
+<h1>🎮 GAME PLATFORM</h1>
+<p id="username">Welcome</p>
+</header>
+
+<div class="wallet">
+<div>YOUR WALLET</div>
+<h2 id="coins">Loading...</h2>
+<small>Shared Game Credits</small>
+</div>
+
+<div class="games">
+<section class="game">
+<h2>🐃 BUFFALO SLOT</h2>
+<p>Enter the Buffalo Slot Game</p>
+<button onclick="location.href='/game'">PLAY BUFFALO</button>
+</section>
+
+<section class="game">
+<h2>🃏 SHAN KOE MEE</h2>
+<p>Enter the Shan Koe Mee Room</p>
+<button onclick="location.href='/shan'">PLAY SHAN KOE MEE</button>
+</section>
+
+<section class="game">
+<h2>🎲 MORE GAMES</h2>
+<p>More games will be added here later.</p>
+<button disabled>COMING SOON</button>
+</section>
+</div>
+
+<button class="logout" onclick="logout()">LOG OUT</button>
+
+<script>
+async function loadUser(){
+try{
+const r=await fetch('/api/me');
+if(!r.ok){location.href='/';return;}
+const u=await r.json();
+document.getElementById('username').textContent='Welcome, '+u.username;
+document.getElementById('coins').textContent=Number(u.coins).toLocaleString()+' CREDITS';
+}catch(e){
+document.getElementById('coins').textContent='Unable to load';
+}
+}
+async function logout(){
+await fetch('/api/logout',{method:'POST'});
+location.href='/';
+}
+loadUser();
+</script>
+</body>
+</html>
