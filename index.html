@@ -613,4 +613,27 @@ loadAccount();
     padding:5px;
   }
 }
+
+@media (orientation: landscape) and (max-height: 500px) {
+  body { overflow-x: hidden; overflow-y: auto; }
+  .reels { width: min(96vw, 900px); max-width: 900px; margin: 5px auto; }
+  .reel { height: min(42vh, 190px); }
+  .reel .cell {
+    flex-basis: min(10vw, 18vh, 72px);
+    height: min(10vw, 18vh, 72px);
+  }
+  .stats { margin: 4px 0; padding: 4px; }
+  .controls {
+    max-width: 900px;
+    margin: 5px auto 55px;
+    padding: 5px;
+    gap: 4px;
+  }
+  .controls button, .controls .unit {
+    min-height: 36px;
+    padding: 4px;
+    font-size: 12px;
+  }
+  footer { padding: 7px; }
+}
 </style>
