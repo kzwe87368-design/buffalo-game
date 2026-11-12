@@ -86,7 +86,7 @@ const r=await fetch('/api/me');
 if(!r.ok){location.href='/';return;}
 const u=await r.json();
 document.getElementById('username').textContent='Welcome, '+u.username;
-document.getElementById('coins').textContent=Number(u.coins).toLocaleString()+' CREDITS';
+document.getElementById('coins').textContent=u.is_owner?'UNLIMITED':Number(u.coins).toLocaleString()+' CREDITS';
 }catch(e){
 document.getElementById('coins').textContent='Unable to load';
 }

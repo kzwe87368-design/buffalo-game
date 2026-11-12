@@ -146,7 +146,7 @@ const files = [
   'A.png','K.png','Q.png','10.png','9.png','wild.png'
 ];
 
-let credit = 0, bet = 80, freeSpins = 0, pendingScatter = 0, busy = true;
+let credit = 0, bet = 80, freeSpins = 0, pendingScatter = 0, busy = true, isOwner = false;
 let cLevel = 1;
 const cLevels = [1, 5, 10, 20, 50];
 let activeAnimations = [];
@@ -227,8 +227,9 @@ function countUp(element, amount, duration = 1800) {
 }
 
 function update() {
-  document.getElementById('topCredit').textContent = fmt(credit);
-  document.getElementById('credit').textContent = fmt(credit);
+  const walletText = isOwner ? 'UNLIMITED' : fmt(credit);
+  document.getElementById('topCredit').textContent = walletText;
+  document.getElementById('credit').textContent = walletText;
   document.getElementById('bet').textContent = bet;
   document.getElementById('betValue').textContent = fmt(bet);
   document.getElementById('cValue').textContent = cLevel + 'C';
@@ -549,6 +550,7 @@ async function loadAccount() {
     }
 
     const user = await r.json();
+    isOwner = user.is_owner === true;
     credit = user.coins;
     freeSpins = user.free_spins || 0;
     busy = false;

@@ -104,6 +104,7 @@ def me():
         return jsonify(error="Account not found"), 404
 
     result = dict(user)
+    result["is_owner"] = (user["role"] == "owner")
     result.pop("role", None)
     return jsonify(result)
 
