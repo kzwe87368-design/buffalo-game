@@ -27,6 +27,16 @@ with connect() as db:
     """)
     db.execute("INSERT OR IGNORE INTO jp_stats (id, total) VALUES (1, 0)")
 
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS daily_bonus (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            bonus_date TEXT NOT NULL,
+            amount INTEGER NOT NULL DEFAULT 5000,
+            UNIQUE(user_id, bonus_date)
+        )
+    """)
+
 
 @app.get("/api/jp")
 def get_jp():
