@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, session, send_file, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3, re, os
+import sqlite3, re, os, hmac
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("BUFFALO_SECRET", os.urandom(32))
@@ -107,6 +107,29 @@ def me():
     result["is_owner"] = (user["role"] == "owner")
     result.pop("role", None)
     return jsonify(result)
+
+@app.post("/api/owner/activate")
+def activate_owner():
+    expected = os.environ.get("BUFFALO_OWNER_ACTIVATION_KEY", "")
+    supplied = request.headers.get("X-Owner-Activation-Key", "")
+
+    if not expected or not supplied or not hmac.compare_digest(expected, supplied):
+        return jsonify(error="Unauthorized"), 403
+
+    with connect() as db:
+        user = db.execute(
+            "SELECT id FROM users WHERE username='BUFFALO_OWNER'"
+        ).fetchone()
+
+        if not user:
+            return jsonify(error="Owner account not found"), 404
+
+        db.execute(
+            "UPDATE users SET role='owner' WHERE id=?", (user["id"],)
+        )
+
+    return jsonify(message="Owner activated")
+
 
 @app.post("/api/logout")
 def logout():
