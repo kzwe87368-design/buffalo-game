@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#071710">
-<title>BUFFALO GAME PLATFORM</title>
+<title>CTH SHAN KOE MEE</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#24543d 0%,#10291e 45%,#06120d 100%);color:#fff;font-family:Arial,sans-serif;padding:16px}
@@ -76,6 +76,90 @@ button{border:0;border-radius:10px;padding:13px;background:linear-gradient(#ffe5
 .daily-reward button:disabled{opacity:.55}
 #bonusStatus{font-size:13px;margin-top:10px;color:#ffe18a}
 
+
+/* CTH SHAN KOE MEE - PREMIUM LOBBY THEME */
+:root{--cth-red:#a91f2b;--cth-red2:#ed3947;--cth-silver:#dce2e8;--cth-dark:#090b10;--cth-panel:#171a22;--cth-muted:#aab0bb}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{padding:18px;background:radial-gradient(ellipse at 50% -15%,#4b1720 0%,#171019 38%,#080a0f 78%);color:#f7f7fa}
+header{max-width:1280px;padding:12px 4px 18px;border-bottom:1px solid #ffffff18}
+.brand{font-size:36px;font-weight:1000;letter-spacing:7px;color:#f2f3f5;text-shadow:0 2px 0 #737984,0 5px 18px #e3293c77}
+.brand small{font-size:10px;letter-spacing:4px;color:#f06b75}
+.online{color:#8fe7ac}
+.cth-nav{max-width:1280px;margin:14px auto 22px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.cth-nav a{color:#e9edf2;text-decoration:none;font-weight:900;font-size:12px;letter-spacing:1px;padding:11px 20px;border:1px solid #ffffff22;border-radius:9px;background:linear-gradient(145deg,#252832,#11131a);box-shadow:0 5px 14px #0006}
+.cth-nav a:active{background:linear-gradient(135deg,#d52b3a,#751722)}
+main{max-width:1280px}
+.profile,.social-card{background:linear-gradient(125deg,#222630,#11141b);border:1px solid #747b8866;box-shadow:0 12px 28px #0008}
+.avatar{background:#0b0d13;border:2px solid #d7dce3}
+.player h2{color:#fff}
+.player small,.levelrow{color:#b9c0cb}
+.progress{background:#080a0f}
+.progress span{background:linear-gradient(90deg,#a91f2b,#f0c4c8)}
+.profile button,button{background:linear-gradient(135deg,#f1f2f4,#9ca3ad);color:#15171c}
+.wallet{background:linear-gradient(120deg,#282c36,#11141b);border:1px solid #aeb5c266;box-shadow:0 10px 25px #0007}
+.wallet label,.wallet small{color:#c0c6d0}
+.wallet h2{color:#fff;text-shadow:0 0 15px #e33b4a55}
+.section-title h2{color:#f0f1f4}
+.section-title span{color:#b9a6aa}
+.games{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.game{min-height:205px;background:linear-gradient(145deg,#292d38,#11141b);border:1px solid #8b929f66;box-shadow:0 12px 25px #0007;transition:transform .2s,border-color .2s}
+.game:active{transform:scale(.98)}
+.game .symbol{font-size:43px}
+.game h3{color:#f3dfe1}
+.game p{color:#bfc4ce}
+.game button{background:linear-gradient(135deg,#d93443,#841b27);color:#fff}
+.game button:disabled{background:#454a54;color:#c3c7ce}
+.daily-reward{background:linear-gradient(120deg,#30242a,#151820);border:1px solid #b68b91}
+.daily-reward h2{color:#f1dfe2}
+.daily-reward p{color:#d0c7cb}
+.daily-reward button{background:linear-gradient(135deg,#f1f2f4,#aab0ba);color:#171920}
+#bonusStatus{color:#f2cbd0}
+.social-card h3{color:#f0dfe2}
+.social-item{background:#0c0f15}
+.social-item small,.social-empty{color:#aeb5c0}
+.social-search input{background:#090c12;border-color:#646b78}
+.dialog{background:#171a22;border-color:#a2a8b2}
+.dialog h2{color:#f2dfe2}
+.dialog input{background:#090c12;border-color:#68717e}
+.avatar-choice{background:#242833;border-color:#59616d}
+.avatar-choice.selected{border-color:#ed5360;background:#48232b}
+.logout{background:linear-gradient(135deg,#a91f2b,#68141e);color:#fff}
+@media(min-width:900px){
+ .profile{padding:22px 26px}
+ .wallet{display:inline-block;width:calc(35% - 10px);vertical-align:top;margin:18px 0}
+ .section-title{margin-top:30px}
+}
+@media(max-width:760px){
+ body{padding:10px}
+ .brand{font-size:29px}
+ .games{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .cth-nav a{padding:10px 12px;font-size:10px}
+}
+@media(max-width:480px){
+ .games{grid-template-columns:1fr}
+ .brand{font-size:25px}
+}
+
+
+/* CTH VIDEO-INSPIRED LANDSCAPE LOBBY */
+.cth-layout{display:grid;grid-template-columns:minmax(230px,30%) minmax(0,1fr);gap:18px;align-items:stretch}
+.cth-hostess{position:relative;min-height:570px;overflow:hidden;isolation:isolate;border:1px solid #b58c55;border-radius:18px;background:radial-gradient(ellipse at 50% 32%,#70404b,#301b2a 48%,#10121a 85%);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 14px 34px #0009}
+.hostess-glow{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(ellipse,#d59a6b33,transparent 68%);filter:blur(12px);z-index:-1;animation:cthGlow 6s ease-in-out infinite}
+.hostess-mark{font-size:clamp(54px,8vw,100px);font-weight:1000;letter-spacing:8px;color:#f2e8d9;text-shadow:0 3px 0 #777,0 8px 24px #e12c4a99;animation:hostessFloat 5s ease-in-out infinite}
+.hostess-cards{display:flex;gap:12px;margin-top:28px;transform:rotate(-5deg)}
+.hostess-cards span{width:64px;height:92px;border-radius:8px;background:linear-gradient(145deg,#fff,#dfe3e9);color:#15171c;display:grid;place-items:center;font-size:25px;font-weight:900;box-shadow:0 8px 18px #0009;border:1px solid #c8cbd0}
+.hostess-cards span+span{transform:translateY(9px) rotate(9deg)}
+.hostess-caption{margin-top:28px;color:#f4d8dc;font-weight:900;letter-spacing:4px;font-size:15px}
+.hostess-note{position:absolute;bottom:18px;color:#c2aeb5;font-size:10px;letter-spacing:3px}
+.cth-content{min-width:0}
+.cth-nav{position:fixed;z-index:20;left:50%;bottom:8px;transform:translateX(-50%);width:min(760px,calc(100% - 24px));padding:7px;display:flex;justify-content:space-around;gap:5px;flex-wrap:nowrap;border:1px solid #aeb5c255;border-radius:14px;background:#10131bef;box-shadow:0 8px 28px #000b}
+.cth-nav a{flex:1;text-align:center;padding:12px 8px;font-size:11px;white-space:nowrap}
+body{padding-bottom:82px}
+@keyframes hostessFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes cthGlow{0%,100%{opacity:.65;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+@media(max-width:760px){.cth-layout{grid-template-columns:1fr}.cth-hostess{min-height:240px}.hostess-mark{font-size:54px}.hostess-cards{margin-top:12px}.hostess-cards span{width:44px;height:64px;font-size:19px}.hostess-caption{margin-top:14px}.cth-nav a{font-size:9px;padding:10px 5px}}
+@media(min-width:761px){.cth-content .games{grid-template-columns:repeat(2,minmax(0,1fr))}.cth-content .wallet{display:block;width:100%;margin:14px 0}}
+
 </style>
 <link rel="manifest" href="/static/manifest.json">
 <link rel="apple-touch-icon" href="/static/icons/icon-512.png">
@@ -94,12 +178,28 @@ if ("serviceWorker" in navigator) {
 </head>
 <body>
 <header>
- <div class="brand">🐃 BUFFALO <small>ONLINE GAME PLATFORM</small></div>
- <div class="online">● PLAYER LOBBY</div>
+ <div class="brand">CTH <small>SHAN KOE MEE · GAME WORLD</small></div>
+ <div class="online">● CTH PLAYER LOBBY</div>
 </header>
 
+<nav class="cth-nav">
+ <a href="#gameCenter">🎮 GAMES</a>
+ <a href="#rewardCenter">🎁 REWARDS</a>
+ <a href="#missionCenter">🎯 MISSIONS</a>
+ <a href="#socialCenter">👥 SOCIAL</a>
+</nav>
+
 <main>
- <section class="profile">
+ <div class="cth-layout">
+  <aside class="cth-hostess">
+   <div class="hostess-glow"></div>
+   <div class="hostess-mark">CTH</div>
+   <div class="hostess-cards"><span>A♠</span><span>8♠</span></div>
+   <div class="hostess-caption">SHAN KOE MEE</div>
+   <div class="hostess-note">CTH GAME WORLD</div>
+  </aside>
+  <div class="cth-content">
+ <section class="profile" id="playerProfile">
   <div class="avatar" id="avatarDisplay">🐯</div>
   <div class="player">
    <h2 id="displayName">Loading Player...</h2>
@@ -116,7 +216,7 @@ if ("serviceWorker" in navigator) {
   <small>Shared Game Credits</small>
  </section>
 
- <div class="section-title"><h2>🎮 GAME CENTER</h2><span>SELECT YOUR GAME</span></div>
+ <div class="section-title" id="gameCenter"><h2>🎮 CTH GAME WORLD</h2><span>SELECT YOUR GAME</span></div>
  <section class="games">
   <article class="game">
    <div><div class="symbol">🐃</div><h3>BUFFALO SLOT</h3><p>Enter the Buffalo Slot Game</p></div>
@@ -133,8 +233,8 @@ if ("serviceWorker" in navigator) {
  </section>
 
 
-<section class="daily-reward">
- <h2>🎁 DAILY REWARD CENTER</h2>
+<section class="daily-reward" id="rewardCenter">
+ <h2>🎁 CTH DAILY REWARD</h2>
  <p>Claim your daily gift and receive <b>5,000 FREE CREDITS</b>.</p>
  <button id="claimBonus" onclick="claimDailyBonus()">CLAIM DAILY BONUS</button>
  <div id="bonusStatus">Checking today's reward...</div>
@@ -148,7 +248,7 @@ if ("serviceWorker" in navigator) {
  <div id="missionStatus"></div>
 </section>
 
-<section class="social-card" style="margin:18px 0">
+<section class="social-card" id="socialCenter" style="margin:18px 0">
   <h3>👥 SOCIAL CENTER</h3>
   <div class="social-grid">
    <div class="social-card">
@@ -179,6 +279,8 @@ if ("serviceWorker" in navigator) {
  </section>
 
  <button class="logout" onclick="logout()">LOG OUT</button>
+  </div>
+ </div>
 </main>
 
 <div class="modal" id="profileModal">
