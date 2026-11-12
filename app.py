@@ -28,6 +28,19 @@ def setup():
         )
         """)
 
+        columns = {
+            row["name"] for row in db.execute("PRAGMA table_info(users)")
+        }
+        additions = {
+            "display_name": "TEXT",
+            "avatar": "TEXT NOT NULL DEFAULT 'avatar1'",
+            "level": "INTEGER NOT NULL DEFAULT 1",
+            "xp": "INTEGER NOT NULL DEFAULT 0",
+        }
+        for name, definition in additions.items():
+            if name not in columns:
+                db.execute(f"ALTER TABLE users ADD COLUMN {name} {definition}")
+
 @app.get("/")
 def home():
     return send_file("login.html")
@@ -86,6 +99,8 @@ def login():
 
     session.clear()
     session["user_id"] = user["id"]
+    from mission_server import ensure_daily_missions
+    ensure_daily_missions(user["id"])
     return jsonify(message="Login successful", username=user["username"])
 
 @app.get("/api/me")
@@ -108,6 +123,51 @@ def me():
     result.pop("role", None)
     return jsonify(result)
 
+@app.get("/api/profile")
+def get_profile():
+    if "user_id" not in session:
+        return jsonify(error="Please login"), 401
+
+    with connect() as db:
+        user = db.execute(
+            """SELECT id, username, display_name, avatar, level, xp, coins
+               FROM users WHERE id=?""",
+            (session["user_id"],)
+        ).fetchone()
+
+    if not user:
+        return jsonify(error="Account not found"), 404
+
+    result = dict(user)
+    result["display_name"] = result["display_name"] or result["username"]
+    result["player_id"] = f"BUFFALO-{result['id']:06d}"
+    return jsonify(result)
+
+
+@app.post("/api/profile")
+def update_profile():
+    if "user_id" not in session:
+        return jsonify(error="Please login"), 401
+
+    data = request.get_json(silent=True) or {}
+    display_name = str(data.get("display_name", "")).strip()
+    avatar = str(data.get("avatar", "")).strip()
+
+    if not 2 <= len(display_name) <= 20:
+        return jsonify(error="Display name must be 2-20 characters"), 400
+
+    if not re.fullmatch(r"avatar(?:[1-9]|10)", avatar):
+        return jsonify(error="Invalid avatar"), 400
+
+    with connect() as db:
+        db.execute(
+            "UPDATE users SET display_name=?, avatar=? WHERE id=?",
+            (display_name, avatar, session["user_id"])
+        )
+
+    return jsonify(message="Profile updated", display_name=display_name, avatar=avatar)
+
+
 @app.post("/api/logout")
 def logout():
     session.clear()
@@ -120,6 +180,7 @@ setup()
 import admin_server
 import game_api
 import shan_api
+import social_server
 
 @app.get("/shan")
 def shan_game():
@@ -136,3 +197,4 @@ def service_worker():
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000)
+import mission_server

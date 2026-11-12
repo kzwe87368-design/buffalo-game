@@ -35,6 +35,36 @@ def get_jp():
     return jsonify(jp_total=row["total"] if row else 0)
 
 
+
+@app.get("/api/bonus/status")
+def daily_bonus_status():
+    uid = session.get("user_id")
+    if not uid:
+        return jsonify(error="Please login"), 401
+
+    today = date.today().isoformat()
+
+    with connect() as db:
+        claimed_row = db.execute(
+            "SELECT amount FROM daily_bonus WHERE user_id=? AND bonus_date=?",
+            (uid, today)
+        ).fetchone()
+
+        user = db.execute(
+            "SELECT coins FROM users WHERE id=?", (uid,)
+        ).fetchone()
+
+    if not user:
+        return jsonify(error="User not found"), 404
+
+    return jsonify(
+        claimed=bool(claimed_row),
+        bonus=int(claimed_row["amount"]) if claimed_row else 5000,
+        bonus_date=today,
+        coins=user["coins"]
+    )
+
+
 @app.post("/api/bonus")
 def daily_bonus():
     uid = session.get("user_id")
@@ -277,6 +307,10 @@ def play_spin():
             "SELECT total FROM jp_stats WHERE id=1"
         ).fetchone()
         jp_total = jp_row["total"] if jp_row else 0
+
+    if not use_free:
+        from mission_server import add_mission_progress
+        add_mission_progress(session["user_id"], "buffalo_spin")
 
     return jsonify(
         jp_total=jp_total,

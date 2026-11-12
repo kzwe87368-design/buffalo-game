@@ -265,6 +265,9 @@ def shan_play():
             (json.dumps(hands), json.dumps(deck), round_id)
         )
 
+    from mission_server import add_mission_progress
+    add_mission_progress(uid, "shan_round")
+
     return jsonify(
         results=results,
         winner="YOU" if user_wins else "AI DEALER",

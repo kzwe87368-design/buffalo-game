@@ -1,100 +1,454 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GAME LOBBY</title>
+<meta name="theme-color" content="#071710">
+<title>BUFFALO GAME PLATFORM</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(#173d32,#06140f);color:white;font-family:Arial,sans-serif;padding:20px}
-header{text-align:center;padding:20px 0}
-h1{color:#ffe18a;font-size:32px;margin:5px}
-#username{color:#b8e8cf}
-.wallet{margin:15px auto;padding:15px;max-width:420px;background:#173d32;border:1px solid #65bd8a;border-radius:12px;text-align:center}
-.games{max-width:650px;margin:25px auto;display:grid;grid-template-columns:1fr;gap:18px}
-.game{background:linear-gradient(145deg,#244d3b,#10271e);border:1px solid #8bc49b;border-radius:16px;padding:22px;text-align:center}
-.game h2{color:#ffe18a;margin:5px}
-.game p{color:#d1e6d8}
-button{width:100%;padding:14px;border:0;border-radius:9px;background:linear-gradient(#ffe58a,#c96c0c);font-weight:bold;font-size:16px}
-.logout{display:block;max-width:250px;margin:30px auto;background:#71302b;color:white}
-</style>
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#24543d 0%,#10291e 45%,#06120d 100%);color:#fff;font-family:Arial,sans-serif;padding:16px}
+header{max-width:1050px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 22px}
+.brand{font-size:25px;font-weight:900;color:#ffe18a;letter-spacing:2px}
+.brand small{display:block;color:#a8cdb6;font-size:10px;letter-spacing:4px;margin-top:5px}
+.online{font-size:12px;color:#9de6b5}
+main{max-width:1050px;margin:auto}
+.profile{display:flex;align-items:center;gap:16px;background:linear-gradient(120deg,#244d38,#10291e);border:1px solid #679b76;border-radius:18px;padding:18px;box-shadow:0 12px 30px #0005}
+.avatar{width:76px;height:76px;flex-shrink:0;border-radius:18px;background:#0b1b13;border:2px solid #e7c76d;display:grid;place-items:center;font-size:43px}
+.player{min-width:0;flex:1}
+.player h2{margin:0 0 7px;color:#ffe18a;font-size:21px;overflow-wrap:anywhere}
+.player small{color:#b6d4c0}
+.profile button{width:auto;padding:11px 16px;background:linear-gradient(#ffe58a,#c98b2e);white-space:nowrap}
+.levelrow{display:flex;justify-content:space-between;margin-top:12px;font-size:12px;color:#d7e9dc}
+.progress{height:8px;background:#07140d;border-radius:20px;margin-top:7px;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#76d99a,#ffe18a)}
+.wallet{margin:18px 0;background:linear-gradient(110deg,#173d2b,#24563b);border:1px solid #7ab58b;border-radius:16px;padding:17px;text-align:center}
+.wallet label{font-size:12px;letter-spacing:3px;color:#b9d9c4}
+.wallet h2{font-size:28px;color:#ffe18a;margin:9px 0 3px}
+.wallet small{color:#b9d9c4}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:28px 2px 14px}
+.section-title h2{font-size:18px;color:#ffe18a;margin:0;letter-spacing:1px}
+.section-title span{font-size:11px;color:#a8cdb6}
+.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.game{position:relative;overflow:hidden;min-height:185px;background:linear-gradient(145deg,#28543e,#10271c);border:1px solid #6c9e79;border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+.game .symbol{font-size:38px}
+.game h3{font-size:19px;color:#ffe18a;margin:10px 0 5px}
+.game p{font-size:13px;color:#c6ddce;margin:0 0 15px}
+button{border:0;border-radius:10px;padding:13px;background:linear-gradient(#ffe58a,#c98220);color:#241707;font-weight:900;font-size:14px;cursor:pointer}
+.game button{width:100%}
+.game button:disabled{background:#53665a;color:#d0d8d1;cursor:not-allowed}
+.logout{display:block;width:220px;margin:28px auto;background:#71302b;color:white}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:16px}
+.modal.show{display:flex}
+.dialog{width:100%;max-width:420px;max-height:90vh;overflow:auto;background:#10291e;border:1px solid #8db99a;border-radius:18px;padding:22px}
+.dialog h2{color:#ffe18a;margin:0 0 18px}
+.dialog label{display:block;font-size:13px;color:#c5ddce;margin:14px 0 7px}
+.dialog input{width:100%;padding:13px;border-radius:9px;border:1px solid #638c70;background:#07170f;color:white;font-size:16px}
+.avatars{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.avatar-choice{border:1px solid #587b62;border-radius:10px;background:#193b29;padding:10px 2px;font-size:25px;cursor:pointer;text-align:center}
+.avatar-choice.selected{border:2px solid #ffe18a;background:#315a3d}
+.actions{display:flex;gap:10px;margin-top:20px}
+.actions button{flex:1}
+.cancel{background:#53665a;color:white}
+#message{min-height:18px;color:#ffb3a9;font-size:13px;margin-top:10px}
+@media(max-width:560px){body{padding:12px}.brand{font-size:21px}.profile{gap:11px;padding:13px}.avatar{width:62px;height:62px;font-size:35px}.player h2{font-size:17px}.profile button{padding:10px;font-size:12px}.games{grid-template-columns:1fr}.game{min-height:165px}}
 
+.social-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:15px 0}
+.social-card{background:linear-gradient(145deg,#204832,#10271c);border:1px solid #608e6c;border-radius:15px;padding:16px;min-width:0}
+.social-card h3{color:#ffe18a;font-size:16px;margin:0 0 13px}
+.social-list{display:grid;gap:9px}
+.social-item{display:flex;align-items:center;gap:9px;padding:9px;background:#0b1d13;border-radius:10px;font-size:13px;min-width:0}
+.social-item .person{flex:1;min-width:0;overflow-wrap:anywhere}
+.social-item small{display:block;color:#a9cdb5;margin-top:4px}
+.social-item button{width:auto;padding:8px 10px;font-size:11px;white-space:nowrap}
+.social-search{display:flex;gap:8px;margin-bottom:12px}
+.social-search input{min-width:0;flex:1;padding:11px;border:1px solid #608e6c;border-radius:9px;background:#07170f;color:white}
+.social-search button{padding:10px}
+.social-actions{display:flex;gap:6px}
+.social-actions button{padding:7px 9px}
+.social-empty{font-size:12px;color:#aac8b4;padding:8px}
+@media(max-width:560px){.social-grid{grid-template-columns:1fr}}
+
+
+.daily-reward{margin:18px 0;padding:20px;border:1px solid #c99d43;border-radius:16px;background:linear-gradient(135deg,#382b13,#172b1c);color:#fff}
+.daily-reward h2{color:#ffe18a;margin:0 0 8px}
+.daily-reward p{font-size:13px;color:#d8d0b5}
+.daily-reward button{width:auto;min-width:150px;padding:12px 20px;background:linear-gradient(135deg,#f5d477,#bd8427);color:#241806;font-weight:bold}
+.daily-reward button:disabled{opacity:.55}
+#bonusStatus{font-size:13px;margin-top:10px;color:#ffe18a}
+
+</style>
 <link rel="manifest" href="/static/manifest.json">
-<meta name="theme-color" content="#111111">
 <link rel="apple-touch-icon" href="/static/icons/icon-512.png">
 <script>
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(console.error);
-  });
+ window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(console.error));
 }
 </script>
-
 <script>
-(async function () {
-  if (window.matchMedia("(display-mode: standalone)").matches ||
-      window.navigator.standalone === true) {
-    try {
-      if (screen.orientation && screen.orientation.lock) {
-        await screen.orientation.lock("landscape");
-      }
-    } catch (e) {
-      console.log("Landscape lock unavailable:", e.message);
-    }
-  }
+(async function(){
+ if(window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true){
+  try{if(screen.orientation?.lock)await screen.orientation.lock("landscape")}catch(e){}
+ }
 })();
 </script>
-
 </head>
 <body>
 <header>
-<h1>🎮 GAME PLATFORM</h1>
-<p id="username">Welcome</p>
+ <div class="brand">🐃 BUFFALO <small>ONLINE GAME PLATFORM</small></div>
+ <div class="online">● PLAYER LOBBY</div>
 </header>
 
-<div class="wallet">
-<div>YOUR WALLET</div>
-<h2 id="coins">Loading...</h2>
-<small>Shared Game Credits</small>
+<main>
+ <section class="profile">
+  <div class="avatar" id="avatarDisplay">🐯</div>
+  <div class="player">
+   <h2 id="displayName">Loading Player...</h2>
+   <small id="playerId">PLAYER ID: Loading...</small>
+   <div class="levelrow"><span id="levelText">LEVEL 1</span><span id="xpText">0 XP</span></div>
+   <div class="progress"><span id="xpBar"></span></div>
+  </div>
+  <button onclick="openProfile()">EDIT PROFILE</button>
+ </section>
+
+ <section class="wallet">
+  <label>MY WALLET</label>
+  <h2 id="coins">Loading...</h2>
+  <small>Shared Game Credits</small>
+ </section>
+
+ <div class="section-title"><h2>🎮 GAME CENTER</h2><span>SELECT YOUR GAME</span></div>
+ <section class="games">
+  <article class="game">
+   <div><div class="symbol">🐃</div><h3>BUFFALO SLOT</h3><p>Enter the Buffalo Slot Game</p></div>
+   <button onclick="location.href='/game'">PLAY BUFFALO</button>
+  </article>
+  <article class="game">
+   <div><div class="symbol">🃏</div><h3>SHAN KOE MEE</h3><p>Enter the Shan Koe Mee Room</p></div>
+   <button onclick="location.href='/shan'">PLAY SHAN KOE MEE</button>
+  </article>
+  <article class="game">
+   <div><div class="symbol">🎲</div><h3>MORE GAMES</h3><p>New games are being prepared.</p></div>
+   <button disabled>COMING SOON</button>
+  </article>
+ </section>
+
+
+<section class="daily-reward">
+ <h2>🎁 DAILY REWARD CENTER</h2>
+ <p>Claim your daily gift and receive <b>5,000 FREE CREDITS</b>.</p>
+ <button id="claimBonus" onclick="claimDailyBonus()">CLAIM DAILY BONUS</button>
+ <div id="bonusStatus">Checking today's reward...</div>
+</section>
+
+
+<section class="daily-reward" id="missionCenter" style="margin:18px 0">
+ <h2>🎯 DAILY MISSION CENTER</h2>
+ <p>Complete missions and earn extra credits every day!</p>
+ <div id="missionList">Loading missions...</div>
+ <div id="missionStatus"></div>
+</section>
+
+<section class="social-card" style="margin:18px 0">
+  <h3>👥 SOCIAL CENTER</h3>
+  <div class="social-grid">
+   <div class="social-card">
+    <h3>🔎 FIND PLAYERS</h3>
+    <div class="social-search">
+     <input id="friendSearch" maxlength="20" placeholder="Enter username">
+     <button onclick="searchPlayers()">SEARCH</button>
+    </div>
+    <div class="social-list" id="searchResults"><div class="social-empty">Search players by username.</div></div>
+   </div>
+   <div class="social-card">
+    <h3>📩 FRIEND REQUESTS</h3>
+    <div class="social-list" id="incomingList"><div class="social-empty">Loading...</div></div>
+   </div>
+   <div class="social-card">
+    <h3>🟢 MY FRIENDS</h3>
+    <div class="social-list" id="friendsList"><div class="social-empty">Loading...</div></div>
+   </div>
+   <div class="social-card">
+    <h3>🌐 ONLINE PLAYERS</h3>
+    <div class="social-list" id="onlineList"><div class="social-empty">Loading...</div></div>
+   </div>
+   <div class="social-card">
+    <h3>🏆 TOP PLAYERS</h3>
+    <div class="social-list" id="rankingList"><div class="social-empty">Loading...</div></div>
+   </div>
+  </div>
+ </section>
+
+ <button class="logout" onclick="logout()">LOG OUT</button>
+</main>
+
+<div class="modal" id="profileModal">
+ <div class="dialog">
+  <h2>✏️ EDIT PLAYER PROFILE</h2>
+  <label for="nameInput">DISPLAY NAME (2–20 CHARACTERS)</label>
+  <input id="nameInput" maxlength="20" minlength="2" placeholder="Enter display name">
+  <label>CHOOSE YOUR AVATAR</label>
+  <div class="avatars" id="avatarChoices"></div>
+  <div id="message"></div>
+  <div class="actions">
+   <button class="cancel" onclick="closeProfile()">CANCEL</button>
+   <button onclick="saveProfile()">SAVE PROFILE</button>
+  </div>
+ </div>
 </div>
-
-<div class="games">
-<section class="game">
-<h2>🐃 BUFFALO SLOT</h2>
-<p>Enter the Buffalo Slot Game</p>
-<button onclick="location.href='/game'">PLAY BUFFALO</button>
-</section>
-
-<section class="game">
-<h2>🃏 SHAN KOE MEE</h2>
-<p>Enter the Shan Koe Mee Room</p>
-<button onclick="location.href='/shan'">PLAY SHAN KOE MEE</button>
-</section>
-
-<section class="game">
-<h2>🎲 MORE GAMES</h2>
-<p>More games will be added here later.</p>
-<button disabled>COMING SOON</button>
-</section>
-</div>
-
-<button class="logout" onclick="logout()">LOG OUT</button>
 
 <script>
-async function loadUser(){
-try{
-const r=await fetch('/api/me');
-if(!r.ok){location.href='/';return;}
-const u=await r.json();
-document.getElementById('username').textContent='Welcome, '+u.username;
-document.getElementById('coins').textContent=u.is_owner?'UNLIMITED':Number(u.coins).toLocaleString()+' CREDITS';
-}catch(e){
-document.getElementById('coins').textContent='Unable to load';
+const avatarList=["🐯","🦁","🐺","🦊","🐼","🐻","🐸","🐵","🐲","🦅"];
+let selectedAvatar="avatar1";
+let profileData=null;
+
+function avatarNumber(value){
+ const n=Number(String(value||"avatar1").replace("avatar",""));
+ return Number.isInteger(n)&&n>=1&&n<=10?n:1;
 }
+function drawAvatars(){
+ const box=document.getElementById("avatarChoices");
+ box.innerHTML="";
+ avatarList.forEach((emoji,index)=>{
+  const number=index+1;
+  const b=document.createElement("button");
+  b.type="button";
+  b.className="avatar-choice"+(selectedAvatar==="avatar"+number?" selected":"");
+  b.textContent=emoji;
+  b.onclick=()=>{
+   selectedAvatar="avatar"+number;
+   drawAvatars();
+   document.getElementById("avatarDisplay").textContent=emoji;
+  };
+  box.appendChild(b);
+ });
+}
+async function loadUser(){
+ try{
+  const responses=await Promise.all([fetch("/api/me"),fetch("/api/profile")]);
+  if(responses.some(r=>r.status===401)){location.href="/";return;}
+  if(responses.some(r=>!r.ok))throw new Error("Unable to load player");
+  const me=await responses[0].json();
+  profileData=await responses[1].json();
+  document.getElementById("displayName").textContent=profileData.display_name||me.username;
+  document.getElementById("playerId").textContent="PLAYER ID: "+profileData.player_id;
+  document.getElementById("avatarDisplay").textContent=avatarList[avatarNumber(profileData.avatar)-1];
+  document.getElementById("levelText").textContent="LEVEL "+profileData.level;
+  document.getElementById("xpText").textContent=Number(profileData.xp).toLocaleString()+" XP";
+  document.getElementById("xpBar").style.width=(Math.max(0,Number(profileData.xp)%100))+"%";
+  document.getElementById("coins").textContent=me.is_owner?"UNLIMITED":Number(me.coins).toLocaleString()+" CREDITS";
+ }catch(e){
+  document.getElementById("coins").textContent="Unable to load";
+  console.error(e);
+ }
+}
+function openProfile(){
+ if(!profileData)return;
+ document.getElementById("nameInput").value=profileData.display_name||profileData.username;
+ selectedAvatar="avatar"+avatarNumber(profileData.avatar);
+ document.getElementById("avatarDisplay").textContent=avatarList[avatarNumber(selectedAvatar)-1];
+ document.getElementById("message").textContent="";
+ drawAvatars();
+ document.getElementById("profileModal").classList.add("show");
+}
+function closeProfile(){document.getElementById("profileModal").classList.remove("show")}
+async function saveProfile(){
+ const display_name=document.getElementById("nameInput").value.trim();
+ const message=document.getElementById("message");
+ if(display_name.length<2||display_name.length>20){message.textContent="Name must be 2-20 characters.";return}
+ try{
+  const r=await fetch("/api/profile",{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({display_name,avatar:selectedAvatar})
+  });
+  const data=await r.json();
+  if(!r.ok){message.textContent=data.error||"Update failed";return}
+  closeProfile();
+  await loadUser();
+ }catch(e){message.textContent="Connection error. Try again."}
 }
 async function logout(){
-await fetch('/api/logout',{method:'POST'});
-location.href='/';
+ await fetch("/api/logout",{method:"POST"});
+ location.href="/";
 }
+document.getElementById("profileModal").addEventListener("click",e=>{
+ if(e.target.id==="profileModal")closeProfile();
+});
+
+
+
+function missionSafe(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+async function loadMissions(){
+ const box=document.getElementById("missionList");
+ try{
+  const r=await fetch("/api/missions");
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||"Unable to load missions");
+  box.innerHTML=d.missions.map(m=>{
+   const progress=Math.min(Number(m.progress)||0,Number(m.target)||1);
+   const target=Number(m.target)||1;
+   const reward=Number(m.reward)||0;
+   const percent=Math.round(progress/target*100);
+   let action=m.claimed
+    ?'<button disabled>CLAIMED ✓</button>'
+    :m.completed
+     ?`<button data-mission-claim="${missionSafe(m.key)}">CLAIM ${reward.toLocaleString()} CREDITS</button>`
+     :'<button disabled>IN PROGRESS</button>';
+   return `<div class="social-card" style="margin:12px 0;padding:14px">
+    <h3>${missionSafe(m.title)}</h3>
+    <p>Progress: ${progress}/${target} · Reward: ${reward.toLocaleString()} Credits</p>
+    <div style="height:9px;background:#333;border-radius:8px;overflow:hidden">
+     <div style="height:100%;width:${percent}%;background:#19c77a;border-radius:8px"></div>
+    </div>
+    <div style="margin-top:12px">${action}</div>
+   </div>`;
+  }).join("");
+  const coins=document.getElementById("coins");
+  if(coins)coins.textContent=Number(d.coins).toLocaleString()+" CREDITS";
+ }catch(e){
+  box.textContent=e.message;
+ }
+}
+document.getElementById("missionList").addEventListener("click",async e=>{
+ const b=e.target.closest("button[data-mission-claim]");
+ if(!b)return;
+ const key=b.dataset.missionClaim;
+ b.disabled=true;
+ try{
+  const r=await fetch("/api/missions/claim",{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({mission_key:key})
+  });
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||"Claim failed");
+  document.getElementById("missionStatus").textContent=
+   "🎉 +"+Number(d.reward).toLocaleString()+" Credits received!";
+  const coins=document.getElementById("coins");
+  if(coins)coins.textContent=Number(d.coins).toLocaleString()+" CREDITS";
+  await loadMissions();
+ }catch(e){
+  document.getElementById("missionStatus").textContent=e.message;
+  await loadMissions();
+ }
+});
+
+async function checkDailyBonus(){
+ const button=document.getElementById("claimBonus");
+ const status=document.getElementById("bonusStatus");
+ try{
+  const r=await fetch("/api/bonus/status");
+  if(!r.ok)throw new Error("Unable to check reward");
+  const d=await r.json();
+  button.disabled=!!d.claimed;
+  button.textContent=d.claimed?"ALREADY CLAIMED":"CLAIM DAILY BONUS";
+  status.textContent=d.claimed
+   ?"✅ Today's 5,000 Credits reward has already been claimed."
+   :"🎉 Your 5,000 Credits daily reward is ready!";
+ }catch(e){status.textContent="Reward status unavailable."}
+}
+async function claimDailyBonus(){
+ const button=document.getElementById("claimBonus");
+ const status=document.getElementById("bonusStatus");
+ button.disabled=true;
+ try{
+  const r=await fetch("/api/bonus",{method:"POST"});
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||"Claim failed");
+  status.textContent="🎉 +"+Number(d.bonus).toLocaleString()+" Credits received!";
+  button.textContent="ALREADY CLAIMED";
+  const coins=document.getElementById("coins");
+  if(coins)coins.textContent=Number(d.coins).toLocaleString()+" CREDITS";
+ }catch(e){
+  status.textContent=e.message;
+  button.disabled=false;
+  await checkDailyBonus();
+loadMissions();
+ }
+}
+
+function socialSafe(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function socialPlayerRow(x,status=""){
+ const n=socialSafe(x.display_name||x.username);
+ const u=socialSafe(x.username);
+ const level=Number(x.level)||1;
+ return `<div class="social-item"><span>${socialSafe(x.avatar||"🐯")}</span><div class="person"><b>${n}</b><small>@${u} · Lv.${level} ${status}</small></div></div>`;
+}
+async function pingOnline(){
+ try{await fetch("/api/social/ping",{method:"POST"})}catch(e){}
+}
+async function loadSocial(){
+ try{
+  const r=await fetch("/api/social");
+  if(!r.ok)return;
+  const d=await r.json();
+  document.getElementById("friendsList").innerHTML=d.friends.length
+   ?d.friends.map(x=>socialPlayerRow(x,x.online?"🟢 Online":"⚪ Offline")).join("")
+   :'<div class="social-empty">No friends yet.</div>';
+
+  document.getElementById("incomingList").innerHTML=d.incoming.length
+   ?d.incoming.map(x=>`<div class="social-item"><div class="person"><b>${socialSafe(x.display_name)}</b><small>@${socialSafe(x.username)} · Lv.${Number(x.level)||1}</small></div><div class="social-actions"><button data-request="${Number(x.request_id)}" data-action="accept">ACCEPT</button><button class="cancel" data-request="${Number(x.request_id)}" data-action="reject">REJECT</button></div></div>`).join("")
+   :'<div class="social-empty">No new requests.</div>';
+
+  document.getElementById("onlineList").innerHTML=d.online_players.length
+   ?d.online_players.map(x=>socialPlayerRow(x,"🟢 Online")).join("")
+   :'<div class="social-empty">No other players online.</div>';
+
+  document.getElementById("rankingList").innerHTML=d.ranking.length
+   ?d.ranking.map((x,i)=>`<div class="social-item"><b>#${i+1}</b><div class="person"><b>${socialSafe(x.display_name)}</b><small>Level ${Number(x.level)||1} · ${Number(x.xp)||0} XP</small></div></div>`).join("")
+   :'<div class="social-empty">No ranking data.</div>';
+ }catch(e){console.error("Social:",e)}
+}
+async function searchPlayers(){
+ const q=document.getElementById("friendSearch").value.trim();
+ const box=document.getElementById("searchResults");
+ if(q.length<2){box.textContent="Enter at least 2 characters.";return}
+ box.textContent="Searching...";
+ try{
+  const r=await fetch("/api/social/search?q="+encodeURIComponent(q));
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||"Search failed");
+  box.innerHTML=d.players.length?d.players.map(x=>
+   `<div class="social-item"><div class="person"><b>${socialSafe(x.display_name)}</b><small>@${socialSafe(x.username)} · Lv.${Number(x.level)||1}</small></div><button data-add="${socialSafe(x.username)}">ADD</button></div>`
+  ).join(""):'<div class="social-empty">No players found.</div>';
+ }catch(e){box.textContent=e.message}
+}
+document.getElementById("searchResults").addEventListener("click",async e=>{
+ const b=e.target.closest("button[data-add]");
+ if(!b)return;
+ b.disabled=true;
+ try{
+  const r=await fetch("/api/social/request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:b.dataset.add})});
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||"Request failed");
+  b.textContent="SENT";
+  await loadSocial();
+ }catch(e){b.disabled=false;alert(e.message)}
+});
+document.getElementById("incomingList").addEventListener("click",async e=>{
+ const b=e.target.closest("button[data-request]");
+ if(!b)return;
+ b.disabled=true;
+ try{
+  const r=await fetch("/api/social/respond",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({request_id:Number(b.dataset.request),action:b.dataset.action})});
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||"Action failed");
+  await loadSocial();
+ }catch(e){b.disabled=false;alert(e.message)}
+});
+document.getElementById("friendSearch").addEventListener("keydown",e=>{
+ if(e.key==="Enter")searchPlayers();
+});
+checkDailyBonus();
+pingOnline();
+loadSocial();
+setInterval(pingOnline,30000);
+setInterval(loadSocial,30000);
+
 loadUser();
 </script>
 </body>
