@@ -3,6 +3,8 @@
     <application
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:label="BUFFALO"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="false">
         <activity
             android:name=".MainActivity"
